@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638971707967576054
-    m_Hash: 3755705201
+      ticks: 638977814404391800
+    m_Hash: 4197914137
   m_LockFileStatus:
     m_FilePath: C:/Users/6229895/Sahur-s-Haunting/Sahur's Haunting/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 638971707967632928
-    m_Hash: 176682070
+      ticks: 638977814404401822
+    m_Hash: 2583143215
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_LocalPackages:
@@ -127,6 +127,7 @@ m_ResolvedPackages:
     - 2.9.2
     - 2.9.3
     - 2.10.0
+    - 2.10.1
     compatible:
     - 2.3.1
     - 2.4.3
@@ -141,6 +142,7 @@ m_ResolvedPackages:
     - 2.9.2
     - 2.9.3
     - 2.10.0
+    - 2.10.1
     recommended: 2.3.1
     deprecated: []
   dependencies: []
