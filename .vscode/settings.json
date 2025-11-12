@@ -51,5 +51,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "lab-7-LeanderAlmonte.sln"
+    "dotnet.defaultSolution": "Sahur-s-Haunting.sln"
 }
