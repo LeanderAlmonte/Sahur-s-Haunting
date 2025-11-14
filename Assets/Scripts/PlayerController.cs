@@ -87,9 +87,15 @@ public class FPSController : MonoBehaviour
     public Transform camHolder;
     public Transform orientation;
 
+    [Header("Ground Check")]
+    public Transform groundCheck;
+    public float groundDistance = 0.2f;
+    public LayerMask groundMask;
+
     private CharacterController controller;
     private Vector3 velocity;
     private float xRotation;
+    private Vector3 camOffset;
 
     private void Start()
     {
@@ -97,6 +103,12 @@ public class FPSController : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        // Store initial local position of the camera
+    if (camHolder != null)
+        camOffset = camHolder.localPosition;
+
+        
     }
 
     private void Update()
@@ -105,7 +117,7 @@ public class FPSController : MonoBehaviour
         Look();
     }
 
-    private void Move()
+    /*private void Move()
     {
         float h = Input.GetAxisRaw("Horizontal");
         float v = Input.GetAxisRaw("Vertical");
@@ -116,7 +128,26 @@ public class FPSController : MonoBehaviour
         // Gravity
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
-    }
+    }*/
+
+    private void Move()
+{
+    float h = Input.GetAxisRaw("Horizontal");
+    float v = Input.GetAxisRaw("Vertical");
+
+    // Movement
+    Vector3 moveDir = orientation.forward * v + orientation.right * h;
+    controller.Move(moveDir.normalized * speed * Time.deltaTime);
+
+    // Gravity
+     bool grounded = IsGrounded();
+    if (grounded && velocity.y < 0)
+        velocity.y = -2f;
+
+    velocity.y += gravity * Time.deltaTime;
+    controller.Move(velocity * Time.deltaTime);
+}
+
 
     private void Look()
     {
@@ -130,4 +161,10 @@ public class FPSController : MonoBehaviour
 
         camHolder.localRotation = Quaternion.Euler(xRotation, 0, 0);
     }
+
+    private bool IsGrounded()
+{
+    // Sphere check slightly below the player
+    return Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+}
 }

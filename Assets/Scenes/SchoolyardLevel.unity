@@ -800,6 +800,7 @@ GameObject:
   - component: {fileID: 302638321}
   - component: {fileID: 302638320}
   - component: {fileID: 302638319}
+  - component: {fileID: 302638323}
   m_Layer: 3
   m_Name: PlayerCam
   m_TagString: MainCamera
@@ -816,7 +817,7 @@ Transform:
   m_GameObject: {fileID: 302638317}
   serializedVersion: 2
   m_LocalRotation: {x: 0.06322599, y: -0, z: -0, w: 0.99799925}
-  m_LocalPosition: {x: 8.54, y: 5.24, z: -2.51}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 0.8, y: 0.80000013, z: 0.80000013}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -834,9 +835,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03e46b91c1602a64eb388167b9c759f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sensX: 400
-  sensY: 400
-  orientation: {fileID: 1973321635}
 --- !u!143 &302638320
 CharacterController:
   m_ObjectHideFlags: 0
@@ -922,6 +920,21 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
+--- !u!114 &302638323
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 302638317}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7b4972a134d2e94b9fdefd0cbaf1843, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensX: 150
+  sensY: 150
+  orientation: {fileID: 1973321635}
 --- !u!1 &344089387
 GameObject:
   m_ObjectHideFlags: 0
@@ -1381,8 +1394,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21f4f9f6afe71eb4a8fa50bdf2270d84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  turnSpeed: 180
+  speed: 6
+  gravity: -9.81
+  sensitivity: 400
+  camHolder: {fileID: 2103338723}
+  orientation: {fileID: 1973321635}
+  groundCheck: {fileID: 0}
+  groundDistance: 0.2
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!136 &580038743
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -2585,6 +2606,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2103338723}
   - component: {fileID: 2103338724}
+  - component: {fileID: 2103338725}
   m_Layer: 0
   m_Name: CameraHolder
   m_TagString: Untagged
@@ -2618,6 +2640,18 @@ MonoBehaviour:
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4c1aa789c5ebbe94ca939184017edc4a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2103338725
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2103338722}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68350ec37ada2ba44aef44179bfaa13d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   cameraPosition: {fileID: 1119453113}
