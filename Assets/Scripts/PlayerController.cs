@@ -1,64 +1,133 @@
+// using UnityEngine;
+
+// public class FPSController : MonoBehaviour
+// {
+//     [Header("Movement")]
+//     public float moveSpeed = 6f;
+//     public float airMultiplier = 0.5f;
+//     public float groundDrag = 4f;
+
+//     [Header("Camera Look")]
+//     public float sensitivity = 150f;
+//     public Transform camHolder;
+//     public Transform orientation;
+
+//     private float xRotation;
+//     private float horizontalInput;
+//     private float verticalInput;
+
+//     private Rigidbody rb;
+
+//     private void Start()
+//     {
+//         rb = GetComponent<Rigidbody>();
+//         rb.freezeRotation = true;
+
+//         Cursor.lockState = CursorLockMode.Locked;
+//         Cursor.visible = false;
+//     }
+
+//     private void Update()
+//     {
+//         MyInput();
+//         Look();
+//         ControlDrag();
+//     }
+
+//     private void FixedUpdate()
+//     {
+//         MovePlayer();
+//     }
+
+//     private void MyInput()
+//     {
+//         horizontalInput = Input.GetAxisRaw("Horizontal");
+//         verticalInput = Input.GetAxisRaw("Vertical");
+//     }
+
+//     private void MovePlayer()
+//     {
+//         Vector3 moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
+//         Vector3 force = moveDirection.normalized * moveSpeed;
+
+//         rb.AddForce(force, ForceMode.Acceleration);
+//     }
+
+//     private void Look()
+//     {
+//         float mouseX = Input.GetAxisRaw("Mouse X") * sensitivity * Time.deltaTime;
+//         float mouseY = Input.GetAxisRaw("Mouse Y") * sensitivity * Time.deltaTime;
+
+//         // Horizontal rotation
+//         transform.Rotate(Vector3.up * mouseX);
+
+//         // Vertical rotation (camera only)
+//         xRotation -= mouseY;
+//         xRotation = Mathf.Clamp(xRotation, -85f, 85f);
+
+//         camHolder.localRotation = Quaternion.Euler(xRotation, 0, 0);
+//     }
+
+//     private void ControlDrag()
+//     {
+//         rb.drag = groundDrag;
+//     }
+// }
+
 using UnityEngine;
 
-[RequireComponent(typeof(CharacterController))]
-public class PlayerController : MonoBehaviour
+public class FPSController : MonoBehaviour
 {
     [Header("Movement")]
-    public float moveSpeed = 5f;     // Movement speed
+    public float speed = 6f;
+    public float gravity = -9.81f;
 
+    [Header("Camera Look")]
+    public float sensitivity = 150f;
+    public Transform camHolder;
     public Transform orientation;
 
-    float horizontalInput;
-    float verticalInput;
-    private Vector3 moveDirection;
-    
-    private float gravity = 9.81f;
+    private CharacterController controller;
+    private Vector3 velocity;
+    private float xRotation;
 
-    Rigidbody rb;
-    void Start()
+    private void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
+        controller = GetComponent<CharacterController>();
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        MovePlayer();
+        Move();
+        Look();
     }
 
-    private void MyInput()
+    private void Move()
     {
-        horizontalInput = Input.GetAxis("Horizontal");
-        verticalInput = Input.GetAxis("Vertical");
+        float h = Input.GetAxisRaw("Horizontal");
+        float v = Input.GetAxisRaw("Vertical");
+
+        Vector3 dir = orientation.forward * v + orientation.right * h;
+        controller.Move(dir.normalized * speed * Time.deltaTime);
+
+        // Gravity
+        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
     }
 
-    private void MovePlayer()
+    private void Look()
     {
-        moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-        
-        rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
+        float mouseX = Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime;
+        float mouseY = Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
+
+        transform.Rotate(Vector3.up * mouseX);
+
+        xRotation -= mouseY;
+        xRotation = Mathf.Clamp(xRotation, -85f, 85f);
+
+        camHolder.localRotation = Quaternion.Euler(xRotation, 0, 0);
     }
-
-  /*  void Update()
-    {
-        // Get input axes
-        float horizontal = Input.GetAxis("Horizontal"); // For turning
-        float vertical = Input.GetAxis("Vertical");     // For moving forward/backward
-
-        // Rotate the character based on horizontal input
-        transform.Rotate(0, horizontal * turnSpeed * Time.deltaTime, 0);
-
-        // Move the character forward/backward
-        if (controller.isGrounded)
-        {
-            // Set move direction forward
-            moveDirection = transform.forward * vertical * moveSpeed;
-        }
-
-        // Apply gravity
-        moveDirection.y -= gravity * Time.deltaTime;
-
-        // Move the character controller
-        controller.Move(moveDirection * Time.deltaTime);
-    }*/
 }
