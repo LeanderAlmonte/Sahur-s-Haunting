@@ -80,6 +80,9 @@ public class FPSController : MonoBehaviour
 {
     [Header("Movement")]
     public float speed = 6f;
+    public float walkSpeed = 6f;  // walking speed
+    public float runSpeed = 12f; 
+    private float currentSpeed;  
     public float gravity = -9.81f;
 
     [Header("Camera Look")]
@@ -91,6 +94,9 @@ public class FPSController : MonoBehaviour
     public Transform groundCheck;
     public float groundDistance = 0.2f;
     public LayerMask groundMask;
+
+    [Header("Animator")]
+    public Animator animator;
 
     private CharacterController controller;
     private Vector3 velocity;
@@ -115,6 +121,7 @@ public class FPSController : MonoBehaviour
     {
         Move();
         Look();
+        Animate();
     }
 
     /*private void Move()
@@ -130,7 +137,7 @@ public class FPSController : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
     }*/
 
-    private void Move()
+   /* private void Move()
 {
     float h = Input.GetAxisRaw("Horizontal");
     float v = Input.GetAxisRaw("Vertical");
@@ -146,7 +153,31 @@ public class FPSController : MonoBehaviour
 
     velocity.y += gravity * Time.deltaTime;
     controller.Move(velocity * Time.deltaTime);
+}*/
+
+private void Move()
+{
+    float h = Input.GetAxisRaw("Horizontal");
+    float v = Input.GetAxisRaw("Vertical");
+
+    // Determine current speed
+    bool isRunning = Input.GetKey(KeyCode.LeftShift);
+    float currentSpeed = isRunning ? runSpeed : walkSpeed;
+
+    // Movement relative to orientation
+    Vector3 moveDir = orientation.forward * v + orientation.right * h;
+
+    // Apply movement
+    controller.Move(moveDir.normalized * currentSpeed * Time.deltaTime);
+
+    // Gravity
+    bool grounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+    if (grounded && velocity.y < 0) velocity.y = -2f;
+
+    velocity.y += gravity * Time.deltaTime;
+    controller.Move(velocity * Time.deltaTime);
 }
+
 
 
     private void Look()
@@ -161,6 +192,26 @@ public class FPSController : MonoBehaviour
 
         camHolder.localRotation = Quaternion.Euler(xRotation, 0, 0);
     }
+
+    private void Animate()
+    {
+        // Horizontal speed for Animator
+        Vector3 horizontalVelocity = controller.velocity;
+        horizontalVelocity.y = 0;
+        float speed = horizontalVelocity.magnitude;
+
+        animator.SetFloat("CharacterSpeed", speed);
+        animator.SetBool("IsRunning", Input.GetKey(KeyCode.LeftShift) && speed > 0.1f);
+
+        // Grounded
+        bool grounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        animator.SetBool("IsGrounded", grounded);
+
+
+        Debug.Log("Speed: " + controller.velocity.magnitude + " | Running: " + Input.GetKey(KeyCode.LeftShift));
+
+    }
+
 
     private bool IsGrounded()
 {
