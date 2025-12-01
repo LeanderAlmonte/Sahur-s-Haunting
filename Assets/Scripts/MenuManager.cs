@@ -46,9 +46,9 @@ public class MenuManager : MonoBehaviour
     void Update()
     {
         // Handle pause menu toggle
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (SceneManager.GetActiveScene().name != "MainMenu")
         {
-            if (SceneManager.GetActiveScene().name != "MainMenu")
+            if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.P))
             {
                 TogglePause();
             }
