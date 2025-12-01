@@ -33,7 +33,9 @@ public class MenuManager : MonoBehaviour
     {
         // Initialize menu
         ShowMainMenu();
+        
         SetupButtonListeners();
+
         LoadSettings();
         
         // Unlock cursor for menus
@@ -153,13 +155,21 @@ public class MenuManager : MonoBehaviour
         AudioListener.volume = volume;
         PlayerPrefs.SetFloat("Volume", volume);
     }
-    
+
     public void SetSensitivity(float sensitivity)
     {
-        // This will be used by the camera controller
+        // Save for future sessions
         PlayerPrefs.SetFloat("Sensitivity", sensitivity);
+
+        // Apply immediately to the current FPSController if one exists
+        FPSController controller = FindObjectOfType<FPSController>();
+        if (controller != null)
+        {
+            controller.SetSensitivity(sensitivity);
+        }
     }
-    
+
+
     void LoadSettings()
     {
         float volume = PlayerPrefs.GetFloat("Volume", 1f);

@@ -74,6 +74,38 @@
 //     }
 // }
 
+
+/*private void Move()
+{
+    float h = Input.GetAxisRaw("Horizontal");
+    float v = Input.GetAxisRaw("Vertical");
+
+    Vector3 dir = orientation.forward * v + orientation.right * h;
+    controller.Move(dir.normalized * speed * Time.deltaTime);
+
+    // Gravity
+    velocity.y += gravity * Time.deltaTime;
+    controller.Move(velocity * Time.deltaTime);
+}*/
+
+/* private void Move()
+{
+ float h = Input.GetAxisRaw("Horizontal");
+ float v = Input.GetAxisRaw("Vertical");
+
+ // Movement
+ Vector3 moveDir = orientation.forward * v + orientation.right * h;
+ controller.Move(moveDir.normalized * speed * Time.deltaTime);
+
+ // Gravity
+  bool grounded = IsGrounded();
+ if (grounded && velocity.y < 0)
+     velocity.y = -2f;
+
+ velocity.y += gravity * Time.deltaTime;
+ controller.Move(velocity * Time.deltaTime);
+}*/
+
 using UnityEngine;
 
 public class FPSController : MonoBehaviour
@@ -107,6 +139,10 @@ public class FPSController : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
 
+        // Load saved sensitivity from PlayerPrefs (if it exists)
+        float savedSensitivity = PlayerPrefs.GetFloat("Sensitivity", sensitivity);
+        sensitivity = savedSensitivity;
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
 
@@ -124,37 +160,6 @@ public class FPSController : MonoBehaviour
         Animate();
     }
 
-    /*private void Move()
-    {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
-
-        Vector3 dir = orientation.forward * v + orientation.right * h;
-        controller.Move(dir.normalized * speed * Time.deltaTime);
-
-        // Gravity
-        velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
-    }*/
-
-   /* private void Move()
-{
-    float h = Input.GetAxisRaw("Horizontal");
-    float v = Input.GetAxisRaw("Vertical");
-
-    // Movement
-    Vector3 moveDir = orientation.forward * v + orientation.right * h;
-    controller.Move(moveDir.normalized * speed * Time.deltaTime);
-
-    // Gravity
-     bool grounded = IsGrounded();
-    if (grounded && velocity.y < 0)
-        velocity.y = -2f;
-
-    velocity.y += gravity * Time.deltaTime;
-    controller.Move(velocity * Time.deltaTime);
-}*/
-
 private void Move()
 {
     float h = Input.GetAxisRaw("Horizontal");
@@ -171,14 +176,12 @@ private void Move()
     controller.Move(moveDir.normalized * currentSpeed * Time.deltaTime);
 
     // Gravity
-    bool grounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+    bool grounded = IsGrounded();
     if (grounded && velocity.y < 0) velocity.y = -2f;
 
     velocity.y += gravity * Time.deltaTime;
     controller.Move(velocity * Time.deltaTime);
 }
-
-
 
     private void Look()
     {
@@ -204,7 +207,7 @@ private void Move()
         animator.SetBool("IsRunning", Input.GetKey(KeyCode.LeftShift) && speed > 0.1f);
 
         // Grounded
-        bool grounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        bool grounded = IsGrounded();
         animator.SetBool("IsGrounded", grounded);
 
 
@@ -212,6 +215,10 @@ private void Move()
 
     }
 
+    public void SetSensitivity(float newSensitivity)
+    {
+        sensitivity = newSensitivity;
+    }
 
     private bool IsGrounded()
 {
