@@ -203,12 +203,12 @@ private void Move()
         horizontalVelocity.y = 0;
         float speed = horizontalVelocity.magnitude;
 
-        animator.SetFloat("CharacterSpeed", speed);
-        animator.SetBool("IsRunning", Input.GetKey(KeyCode.LeftShift) && speed > 0.1f);
+        //animator.SetFloat("CharacterSpeed", speed);
+        //animator.SetBool("IsRunning", Input.GetKey(KeyCode.LeftShift) && speed > 0.1f);
 
         // Grounded
         bool grounded = IsGrounded();
-        animator.SetBool("IsGrounded", grounded);
+        //animator.SetBool("IsGrounded", grounded);
 
 
         Debug.Log("Speed: " + controller.velocity.magnitude + " | Running: " + Input.GetKey(KeyCode.LeftShift));

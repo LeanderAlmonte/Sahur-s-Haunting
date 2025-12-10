@@ -100,16 +100,19 @@ public class AIController : MonoBehaviour
 
     public bool CheckHandsCollision(out GameObject collidedObject, string Tag)
     {
+        
         // You can define these in AIController (leftHandPoint, rightHandPoint)
         Transform[] handTransforms = { leftHandTransform, rightHandTransform };
-
+        Debug.Log(handTransforms);
         foreach (Transform hand in handTransforms)
         {
+            Debug.Log("Hand : " + hand);
             // Overlap check — sphere or capsule works well for melee hitboxes
-            Collider[] hits = Physics.OverlapSphere(hand.position, 0.5f, PlayerLayer);
+            Collider[] hits = Physics.OverlapSphere(hand.position, 3.0f, PlayerLayer);
 
             foreach (var hit in hits)
             {
+                 Debug.Log("Hit : "  + hit);
                 if (hit.CompareTag(Tag))
                 {
                     collidedObject = hit.gameObject;

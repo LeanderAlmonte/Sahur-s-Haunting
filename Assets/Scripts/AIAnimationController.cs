@@ -32,6 +32,7 @@ public class AIAnimationController : MonoBehaviour
     void HitPlayer() // Attack Animation Event to check if the player his hit
     {
         GameObject objectHit;
+        Debug.Log("HitPlayer");
         if (aiController.CheckHandsCollision(out objectHit, "Player"))
         {
            
