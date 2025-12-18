@@ -1,5 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : MonoBehaviour
 {
@@ -82,7 +84,8 @@ public class GameManager : MonoBehaviour
     void OnAllPapersCollected()
     {
         Debug.Log("All papers collected! Tutorial complete.");
-        // Later: show UI / change scene
+        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+        SceneManager.LoadScene(currentSceneIndex + 1);
     }
 
     void OnTimeUp()
