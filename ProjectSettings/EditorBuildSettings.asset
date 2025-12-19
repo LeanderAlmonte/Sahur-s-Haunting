@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/SchoolyardLevel.unity
     guid: cdc23312cf944604cab6c18475b963fd
+  - enabled: 1
+    path: Assets/Scenes/GameOverScene.unity
+    guid: 58a83ef06320c8b44aa1ef779a20771e
   m_configObjects: {}
