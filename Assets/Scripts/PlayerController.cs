@@ -1,112 +1,6 @@
-// using UnityEngine;
-
-// public class FPSController : MonoBehaviour
-// {
-//     [Header("Movement")]
-//     public float moveSpeed = 6f;
-//     public float airMultiplier = 0.5f;
-//     public float groundDrag = 4f;
-
-//     [Header("Camera Look")]
-//     public float sensitivity = 150f;
-//     public Transform camHolder;
-//     public Transform orientation;
-
-//     private float xRotation;
-//     private float horizontalInput;
-//     private float verticalInput;
-
-//     private Rigidbody rb;
-
-//     private void Start()
-//     {
-//         rb = GetComponent<Rigidbody>();
-//         rb.freezeRotation = true;
-
-//         Cursor.lockState = CursorLockMode.Locked;
-//         Cursor.visible = false;
-//     }
-
-//     private void Update()
-//     {
-//         MyInput();
-//         Look();
-//         ControlDrag();
-//     }
-
-//     private void FixedUpdate()
-//     {
-//         MovePlayer();
-//     }
-
-//     private void MyInput()
-//     {
-//         horizontalInput = Input.GetAxisRaw("Horizontal");
-//         verticalInput = Input.GetAxisRaw("Vertical");
-//     }
-
-//     private void MovePlayer()
-//     {
-//         Vector3 moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
-//         Vector3 force = moveDirection.normalized * moveSpeed;
-
-//         rb.AddForce(force, ForceMode.Acceleration);
-//     }
-
-//     private void Look()
-//     {
-//         float mouseX = Input.GetAxisRaw("Mouse X") * sensitivity * Time.deltaTime;
-//         float mouseY = Input.GetAxisRaw("Mouse Y") * sensitivity * Time.deltaTime;
-
-//         // Horizontal rotation
-//         transform.Rotate(Vector3.up * mouseX);
-
-//         // Vertical rotation (camera only)
-//         xRotation -= mouseY;
-//         xRotation = Mathf.Clamp(xRotation, -85f, 85f);
-
-//         camHolder.localRotation = Quaternion.Euler(xRotation, 0, 0);
-//     }
-
-//     private void ControlDrag()
-//     {
-//         rb.drag = groundDrag;
-//     }
-// }
-
-
-/*private void Move()
-{
-    float h = Input.GetAxisRaw("Horizontal");
-    float v = Input.GetAxisRaw("Vertical");
-
-    Vector3 dir = orientation.forward * v + orientation.right * h;
-    controller.Move(dir.normalized * speed * Time.deltaTime);
-
-    // Gravity
-    velocity.y += gravity * Time.deltaTime;
-    controller.Move(velocity * Time.deltaTime);
-}*/
-
-/* private void Move()
-{
- float h = Input.GetAxisRaw("Horizontal");
- float v = Input.GetAxisRaw("Vertical");
-
- // Movement
- Vector3 moveDir = orientation.forward * v + orientation.right * h;
- controller.Move(moveDir.normalized * speed * Time.deltaTime);
-
- // Gravity
-  bool grounded = IsGrounded();
- if (grounded && velocity.y < 0)
-     velocity.y = -2f;
-
- velocity.y += gravity * Time.deltaTime;
- controller.Move(velocity * Time.deltaTime);
-}*/
-
 using UnityEngine;
+using UnityEngine.UI;
+
 
 public class FPSController : MonoBehaviour
 {
@@ -116,6 +10,17 @@ public class FPSController : MonoBehaviour
     public float runSpeed = 12f; 
     private float currentSpeed;  
     public float gravity = -9.81f;
+
+    [Header("Stamina")]
+    public float maxStamina = 100f;
+    public float staminaDrain = 25f; // per second
+    private float currentStamina;
+    public float staminaRegen = 15f;
+    public float regenDelay = 0.5f;
+    
+    public Slider staminaBar;
+
+    private float regenTimer;
 
     [Header("Camera Look")]
     public float sensitivity = 150f;
@@ -150,7 +55,13 @@ public class FPSController : MonoBehaviour
     if (camHolder != null)
         camOffset = camHolder.localPosition;
 
-        
+    currentStamina = maxStamina;
+    
+    if (staminaBar != null)
+    {
+        staminaBar.maxValue = maxStamina;
+        staminaBar.value = currentStamina;
+    }
     }
 
     private void Update()
@@ -166,8 +77,33 @@ private void Move()
     float v = Input.GetAxisRaw("Vertical");
 
     // Determine current speed
-    bool isRunning = Input.GetKey(KeyCode.LeftShift);
+    bool isRunning = Input.GetKey(KeyCode.LeftShift) && currentStamina > 0f;
     float currentSpeed = isRunning ? runSpeed : walkSpeed;
+
+    if (isRunning)
+    {
+        currentStamina -= staminaDrain * Time.deltaTime;
+        currentStamina = Mathf.Max(currentStamina, 0f);
+
+    if (staminaBar != null)
+        staminaBar.value = currentStamina;
+    }
+    else 
+    {
+        regenTimer += Time.deltaTime;
+        if (regenTimer >= regenDelay)
+        {
+            currentStamina += staminaRegen * Time.deltaTime;
+        }
+    }
+
+    currentStamina = Mathf.Clamp(currentStamina, 0f, maxStamina);
+
+    if (staminaBar != null)
+    {
+        staminaBar.value = currentStamina;
+    }
+
 
     // Movement relative to orientation
     Vector3 moveDir = orientation.forward * v + orientation.right * h;
