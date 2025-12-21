@@ -1088,7 +1088,7 @@ MonoBehaviour:
   m_UiScaleMode: 0
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 1920, y: 1080}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -5663,7 +5663,7 @@ MonoBehaviour:
     m_Bits: 8
   visionPersistence: 5
   chaseAudioSource: {fileID: 2114487929}
-  chaseClip: {fileID: 0}
+  chaseClip: {fileID: 8300000, guid: 540b9f3c33e5f6b4788e101871fc6169, type: 3}
 --- !u!114 &2114487927
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5705,7 +5705,7 @@ AudioSource:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2114487918}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 540b9f3c33e5f6b4788e101871fc6169, type: 3}

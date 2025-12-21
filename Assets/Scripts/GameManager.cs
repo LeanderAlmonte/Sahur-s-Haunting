@@ -84,9 +84,14 @@ public class GameManager : MonoBehaviour
     void OnAllPapersCollected()
     {
         Debug.Log("All papers collected! Tutorial complete.");
+
+        if (GameMusicManager.Instance != null)
+            GameMusicManager.Instance.PlayLevelCompleteSfx();
+
         int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
         SceneManager.LoadScene(currentSceneIndex + 1);
     }
+
 
     void OnTimeUp()
     {

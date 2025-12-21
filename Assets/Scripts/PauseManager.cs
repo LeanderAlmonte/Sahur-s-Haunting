@@ -20,6 +20,7 @@ public class PauseManager : MonoBehaviour
         isPaused = !isPaused;
         pauseMenuPanel.SetActive(isPaused);
         Time.timeScale = isPaused ? 0f : 1f;
+        GameMusicManager.Instance?.SetMusicPaused(true);
     }
 
     public void ResumeGame()
@@ -27,6 +28,7 @@ public class PauseManager : MonoBehaviour
         isPaused = false;
         pauseMenuPanel.SetActive(false);
         Time.timeScale = 1f;
+        GameMusicManager.Instance?.SetMusicPaused(false);
     }
 
     public void QuitToMainMenu()
