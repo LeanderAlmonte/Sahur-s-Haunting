@@ -27,6 +27,12 @@ public class AIController : MonoBehaviour
     public float visionPersistence = 0.5f; // seconds to keep seeing after losing sight
     private float lastSeenTime = -999f;
 
+    [Header("Audio")]
+    public AudioSource chaseAudioSource;
+    public AudioClip chaseClip;
+    private StateType _prevState;
+
+
 
     // Add State Machine code Here
 
@@ -45,15 +51,51 @@ public class AIController : MonoBehaviour
         StateMachine.AddState(new AttackState(this)); // Add the new AttackState
 
         StateMachine.TransitionToState(StateType.Idle);
+
+        _prevState = StateMachine.GetCurrentStateType();
+        if (chaseAudioSource != null)
+        {
+            chaseAudioSource.playOnAwake = false;
+            chaseAudioSource.loop = true;
+        }
     }
 
     void Update()
     {
         StateMachine.Update();
         currentState = StateMachine.GetCurrentStateType();
+
+        // Start/stop chase music based on state transitions only
+        if (currentState != _prevState)
+        {
+            if (currentState == StateType.Chase) StartChaseAudio();
+            if (_prevState == StateType.Chase && currentState != StateType.Chase) StopChaseAudio();
+
+            _prevState = currentState;
+        }
     }
 
-    
+    private void StartChaseAudio()
+    {
+        if (chaseAudioSource == null || chaseClip == null) return;
+
+        // If already playing, do nothing
+        if (chaseAudioSource.isPlaying) return;
+
+        chaseAudioSource.clip = chaseClip;
+        chaseAudioSource.loop = true;
+        chaseAudioSource.Play();
+    }
+
+    private void StopChaseAudio()
+    {
+        if (chaseAudioSource == null) return;
+        if (!chaseAudioSource.isPlaying) return;
+
+        chaseAudioSource.Stop();
+    }
+
+
     // 
     public bool CanSeePlayer()
     {

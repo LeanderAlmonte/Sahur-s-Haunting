@@ -10,6 +10,9 @@ public class HidingSystem : MonoBehaviour
     private bool isHiding = false;
     private Vector3 returnPosition;
 
+    [Header("Audio")]
+    public AudioSource hideAudio;  // assign in inspector
+
     void Awake()
     {
         if (Instance != null && Instance != this)
@@ -37,6 +40,11 @@ public class HidingSystem : MonoBehaviour
             if (hideOverlay != null)
                 hideOverlay.SetActive(true);
 
+            if (hideAudio != null && !hideAudio.isPlaying)
+            {
+                hideAudio.Play();
+            }
+
             isHiding = true;
         }
         else
@@ -47,6 +55,11 @@ public class HidingSystem : MonoBehaviour
 
             if (hideOverlay != null)
                 hideOverlay.SetActive(false);
+
+            if (hideAudio != null && hideAudio.isPlaying)
+            {
+                hideAudio.Stop();
+            }
 
             isHiding = false;
         }
