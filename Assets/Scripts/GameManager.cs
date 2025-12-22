@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
@@ -13,9 +12,14 @@ public class GameManager : MonoBehaviour
     public Text papersText;
 
     [Header("Timer")]
-    public float levelTime = 180f; // 3 minutes
+    public float levelTime = 180f;
     private float remainingTime;
     public Text timerText;
+
+    [Header("Fail State")]
+    [SerializeField] private string gameOverSceneName = "GameOverScene";
+
+    private bool hasEnded = false;
 
     void Awake()
     {
@@ -25,8 +29,6 @@ public class GameManager : MonoBehaviour
             return;
         }
         Instance = this;
-        // For now, we can keep it scene-only
-        // DontDestroyOnLoad(gameObject);
     }
 
     void Start()
@@ -38,10 +40,13 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (hasEnded) return;
+
         if (remainingTime > 0f)
         {
             remainingTime -= Time.deltaTime;
             if (remainingTime < 0f) remainingTime = 0f;
+
             UpdateTimerUI();
 
             if (remainingTime <= 0f)
@@ -54,9 +59,7 @@ public class GameManager : MonoBehaviour
     void UpdatePapersUI()
     {
         if (papersText != null)
-        {
             papersText.text = $"Papers: {papersCollected}/{papersNeeded}";
-        }
     }
 
     void UpdateTimerUI()
@@ -72,17 +75,20 @@ public class GameManager : MonoBehaviour
 
     public void CollectPaper()
     {
+        if (hasEnded) return;
+
         papersCollected++;
         UpdatePapersUI();
 
         if (papersCollected >= papersNeeded)
-        {
             OnAllPapersCollected();
-        }
     }
 
     void OnAllPapersCollected()
     {
+        if (hasEnded) return;
+        hasEnded = true;
+
         Debug.Log("All papers collected! Tutorial complete.");
 
         if (GameMusicManager.Instance != null)
@@ -92,10 +98,16 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(currentSceneIndex + 1);
     }
 
-
     void OnTimeUp()
     {
+        if (hasEnded) return;
+        hasEnded = true;
+
         Debug.Log("Time up!");
-        // Later: show fail screen / restart
+
+        // In case you were paused when time hits 0
+        Time.timeScale = 1f;
+
+        SceneManager.LoadScene(gameOverSceneName);
     }
 }

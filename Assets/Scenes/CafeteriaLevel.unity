@@ -1175,8 +1175,9 @@ MonoBehaviour:
   papersNeeded: 5
   papersCollected: 0
   papersText: {fileID: 1344589657}
-  levelTime: 180
+  levelTime: 120
   timerText: {fileID: 1629462708}
+  gameOverSceneName: GameOverScene
 --- !u!4 &404036624
 Transform:
   m_ObjectHideFlags: 0
