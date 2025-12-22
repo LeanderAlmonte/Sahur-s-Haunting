@@ -86,17 +86,24 @@ public class GameManager : MonoBehaviour
 
     void OnAllPapersCollected()
     {
-        if (hasEnded) return;
-        hasEnded = true;
-
-        Debug.Log("All papers collected! Tutorial complete.");
+        Debug.Log("All papers collected!");
 
         if (GameMusicManager.Instance != null)
             GameMusicManager.Instance.PlayLevelCompleteSfx();
 
-        int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-        SceneManager.LoadScene(currentSceneIndex + 1);
+        string current = SceneManager.GetActiveScene().name;
+
+        if (current == "SchoolyardLevel")
+        {
+            SceneManager.LoadScene("VictoryScene");
+        }
+        else
+        {
+            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
+            SceneManager.LoadScene(currentSceneIndex + 1);
+        }
     }
+
 
     void OnTimeUp()
     {

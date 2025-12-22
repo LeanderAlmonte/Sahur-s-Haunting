@@ -13,10 +13,13 @@ EditorBuildSettings:
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
     path: Assets/Scenes/LockerLevel.unity
-    guid: 77ba51fb40b72614e9ea1025270b2903
+    guid: bc4c20249895a3a45b4478965355b0ab
   - enabled: 1
     path: Assets/Scenes/SchoolyardLevel.unity
     guid: cdc23312cf944604cab6c18475b963fd
+  - enabled: 1
+    path: Assets/Scenes/VictoryScene.unity
+    guid: 9b7d0eb0b59598147b51e870f834f4c6
   - enabled: 1
     path: Assets/Scenes/GameOverScene.unity
     guid: 58a83ef06320c8b44aa1ef779a20771e

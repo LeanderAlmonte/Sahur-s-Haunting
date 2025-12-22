@@ -3208,7 +3208,7 @@ MonoBehaviour:
   papersNeeded: 10
   papersCollected: 0
   papersText: {fileID: 574332876}
-  levelTime: 55
+  levelTime: 50
   timerText: {fileID: 116865072}
   gameOverSceneName: GameOverScene
 --- !u!4 &1458711937
