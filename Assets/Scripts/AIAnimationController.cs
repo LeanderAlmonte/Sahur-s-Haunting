@@ -36,7 +36,7 @@ public class AIAnimationController : MonoBehaviour
         if (aiController.CheckHandsCollision(out objectHit, "Player"))
         {
            
-            SceneManager.LoadScene(4);
+            SceneManager.LoadScene(5);
         }
     }
 
